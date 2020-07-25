@@ -27,6 +27,8 @@ start = None
 parserPeriod = re.compile(r'(\d+)(\w?)')
 
 showUpInterruption = False
+workTime = datetime.datetime.now() - datetime.datetime.now()
+
 
 def ListenToConnection():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -57,10 +59,25 @@ if __name__ == '__main__':
     listenerThread = threading.Thread(target=ListenToConnection, daemon=True)
     listenerThread.start()
 
+    def Interrupt():
+        global start
+        global showUpInterruption
+        global workTime
+        workTime = workTime + (datetime.datetime.now() - start)
+        start = None
+        showUpInterruption = False
+        user32.ShowWindow(hwnd, SW_SHOWMAXIMIZED)
+        keybd_event(alt_key, 0, extended_key | 0, 0)
+        user32.SetForegroundWindow(hwnd)
+        # Steal focus. Emulating alt key in order to bypass Windows 'security'
+        keybd_event(alt_key, 0, extended_key | key_up, 0)
+
     while True:
         if not start:
             unparsedPeriod = input(
                 f'[{datetime.datetime.now()}] Enter work period; "m" and "h" suffixes supported ->')
+            if 'q' in unparsedPeriod:
+                break
             match = parserPeriod.search(unparsedPeriod)
             if not match:
                 print('Input is not valid!')
@@ -77,18 +94,14 @@ if __name__ == '__main__':
             user32.ShowWindow(hwnd, SW_HIDE)
             showUpInterruption = False
         elif (datetime.datetime.now() - start).total_seconds() > period:
-            start = None
-            showUpInterruption = False
             winsound.PlaySound('brokenGlass.wav',
                                winsound.SND_FILENAME | winsound.SND_ASYNC)
-            user32.ShowWindow(hwnd, SW_SHOWMAXIMIZED)
-            keybd_event(alt_key, 0, extended_key | 0, 0)
-            user32.SetForegroundWindow(hwnd) 
-            # Steal focus. Emulating alt key in order to bypass Windows 'security'
-            keybd_event(alt_key, 0, extended_key | key_up, 0)
+            Interrupt()
         else:
             time.sleep(REFRESH_PERIOD)
             if showUpInterruption:
-                start = None
-                user32.ShowWindow(hwnd, SW_SHOWMAXIMIZED)
-                showUpInterruption = False
+                Interrupt()
+
+    mikes = workTime.total_seconds()/60
+    hours = round(workTime.total_seconds()/3600)
+    input(f'\nTotal worktime: {mikes:.1f} minutes, or approximately {hours} hours\nPress Enter to exit.')
