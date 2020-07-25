@@ -83,7 +83,8 @@ if __name__ == '__main__':
                                winsound.SND_FILENAME | winsound.SND_ASYNC)
             user32.ShowWindow(hwnd, SW_SHOWMAXIMIZED)
             keybd_event(alt_key, 0, extended_key | 0, 0)
-            user32.SetForegroundWindow(hwnd)
+            user32.SetForegroundWindow(hwnd) 
+            # Steal focus. Emulating alt key in order to bypass Windows 'security'
             keybd_event(alt_key, 0, extended_key | key_up, 0)
         else:
             time.sleep(REFRESH_PERIOD)
