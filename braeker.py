@@ -21,9 +21,9 @@ PORT = 51476
 REFRESH_PERIOD = 1
 HELP_STRING = '''
 This program is designed to serve as trigger that notifies the user \
-    that its time to stand up, leave workstation and have some rest.
+that its time to stand up, leave workstation and have some rest.
 
-Basic idea is that you print how many time you plan to work, console window disappears and shows up after the time passed.\
+Basic idea is that you print how many time you plan to work, console window disappears and shows up after the time passed. \
 If you need to interrupt program just run another instance.
 
 Examples of accepted inputs (no quotes)
