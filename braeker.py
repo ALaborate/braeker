@@ -39,7 +39,7 @@ def ListenToConnection():
 
         s.listen(2)
         while True:
-            conn, addr = s.accept()
+            conn = s.accept()[0]
             conn.close()
             global showUpInterruption
             showUpInterruption = True
