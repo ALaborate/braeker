@@ -1,26 +1,16 @@
 import socket
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-HOST = '127.0.0.1'
-PORT = 7777
+HOST = ''                 # Symbolic name meaning all available interfaces
+PORT = 50007              # Arbitrary non-privileged port
 ENCODING = 'utf-8'
-
-try:
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.bind((HOST, PORT))
-except OSError as err:
-    print(f'Bind failed. Error: {str(err)}.')
-    exit(err.errno)
-
-print(f'Bind successful. Start listening on {PORT}.')
-s.listen(10)
-
-connection, address = s.accept()
-print(f'Connected with {address[0]}:{str(address[1])}')
-connection.sendall('State your name: '.encode(ENCODING))
-data = connection.recv(1024)
-reply = data.decode(ENCODING)
-reply = '\nHello, '+reply+'!'
-connection.sendall(reply.encode(ENCODING))
-connection.close()
-s.close()
+    s.listen(1)
+    conn, addr = s.accept()
+    with conn:
+        print('Connected by', addr)
+        while True:
+            data = conn.recv(1024)
+            if not data:
+                break
+            print(data.decode(ENCODING), sep='', end='')
