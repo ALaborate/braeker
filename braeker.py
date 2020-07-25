@@ -19,6 +19,20 @@ key_up = 0x0002
 HOST = '127.0.0.1'
 PORT = 51476
 REFRESH_PERIOD = 1
+HELP_STRING = '''
+This program is designed to serve as trigger that notifies the user \
+    that its time to stand up, leave workstation and have some rest.
+
+Basic idea is that you print how many time you plan to work, console window disappears and shows up after the time passed.\
+If you need to interrupt program just run another instance.
+
+Examples of accepted inputs (no quotes)
+"120" - 120 seconds
+"15m" - 15 minutes
+"2h" - 2 hours
+"q" - show stats and quit
+"?" - display this help
+'''
 
 hwnd = user32.GetForegroundWindow()
 
@@ -75,12 +89,15 @@ if __name__ == '__main__':
     while True:
         if not start:
             unparsedPeriod = input(
-                f'[{datetime.datetime.now()}] Enter work period; "m" and "h" suffixes supported ->')
+                f'[{datetime.datetime.now()}] $ ')
             if 'q' in unparsedPeriod:
                 break
+            if '?' in unparsedPeriod:
+                print(HELP_STRING)
+                continue
             match = parserPeriod.search(unparsedPeriod)
             if not match:
-                print('Input is not valid!')
+                print('Input is not valid! Type "?" for help. ')
                 continue
             value = int(match.group(1))
             suffix = match.group(2)
