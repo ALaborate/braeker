@@ -120,5 +120,5 @@ if __name__ == '__main__':
                 Interrupt()
 
     mikes = workTime.total_seconds()/60
-    hours = round(workTime.total_seconds()/3600)
-    input(f'\nTotal worktime: {mikes:.1f} minutes, or approximately {hours} hours\nPress Enter to exit.')
+    hours = workTime.total_seconds()/3600
+    input(f'\nTotal worktime: {mikes:.1f} minutes, or approximately {hours:.1f} hours\nPress Enter to exit.')
