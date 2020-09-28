@@ -5,6 +5,7 @@ import re
 import ctypes
 import socket
 import threading
+from os.path import isfile
 from ctypes import wintypes
 
 user32 = ctypes.windll.user32
@@ -111,7 +112,8 @@ if __name__ == '__main__':
             user32.ShowWindow(hwnd, SW_HIDE)
             showUpInterruption = False
         elif (datetime.datetime.now() - start).total_seconds() > period:
-            winsound.PlaySound('brokenGlass.wav',
+            if isfile('brokenGlass.wav'):
+                winsound.PlaySound('brokenGlass.wav',
                                winsound.SND_FILENAME | winsound.SND_ASYNC)
             Interrupt()
         else:
