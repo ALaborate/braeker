@@ -18,4 +18,5 @@ Despite its writen in python, I make some library calls to show and hide console
 ### Installation
 1. Download and install latest python 3 release
 1. Download file `braeker.py` from the repo and place it in any convenient folder
+1. Optionally, download soundfile `brokenGlass.wav` to allow program make noisy sound on interruption. 
 1. Optionally, make a shortcut
