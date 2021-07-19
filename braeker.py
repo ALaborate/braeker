@@ -103,9 +103,9 @@ if __name__ == '__main__':
             value = int(match.group(1))
             suffix = match.group(2)
             coef = 1
-            if suffix == 'm':
+            if suffix == 'm' or suffix == 'м':
                 coef = 60
-            elif suffix == 'h':
+            elif suffix == 'h' or suffix == 'ч':
                 coef = 3600
             period = value*coef
             start = datetime.datetime.now()
